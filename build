@@ -1,0 +1,8 @@
+#!/bin/sh
+buildTarget()
+{
+	docker build -t $1 ./services/$1/.
+}
+
+buildTarget user
+
