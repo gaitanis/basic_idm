@@ -6,6 +6,8 @@ services:
   #  depends_on:
   #    - db
   #    - user
+  #  environment:
+  #    APP_HOST: "user"
   #  deploy:
   #    replicas: 2
   #    resources:

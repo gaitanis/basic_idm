@@ -10,6 +10,7 @@ function incrButtonClicked() {
   	});
 }
 
-function setCounter(value) {
-	$( '#counter' ).text(value)
+function setCounter(result) {
+	var obj = JSON.parse(result)
+	$( '#counter' ).text(obj['value'])
 }
