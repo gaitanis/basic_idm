@@ -1,2 +1,6 @@
 Flask
-Redis
+Flask_restful
+flask_sqlalchemy
+flask_jwt_extended
+mysql-python
+pyjwt

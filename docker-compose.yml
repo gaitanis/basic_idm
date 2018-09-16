@@ -1,10 +1,36 @@
 version: "3"
 services:
+  #web:
+  #  build: services/web
+  #  image: kgaitanis/bee:web
+  #  depends_on:
+  #    - db
+  #    - user
+  #  deploy:
+  #    replicas: 2
+  #    resources:
+  #      limits:
+  #        cpus: "0.1"
+  #        memory: 50M
+  #    restart_policy:
+  #      condition: none
+  #  ports:
+  #    - "4001:80"
+  #  networks:
+  #    - webnet
   user:
-    # replace username/repo:tag with your name and image details
-    image: user
+    build: services/user
+    image: kgaitanis/bee:user
+    depends_on:
+      - db
+    environment:
+      DB_SCHEMA: "mysql"
+      DB_USER: "root"
+      DB_PWD: "Test1234"
+      DB_HOST: "db"
+      DB_NAME: "db"
     deploy:
-      replicas: 1
+      replicas: 2
       resources:
         limits:
           cpus: "0.1"
@@ -13,7 +39,38 @@ services:
         condition: none
     ports:
       - "4000:80"
+      - "3306:3306"
+    networks:
+      - webnet
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_ROOT_PASSWORD: "Test1234"
+      ACCEPT_EULA: "Y"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    ports:
+      - "32000:3306"
+    volumes:
+      - db-data:/data
+    networks:
+      - webnet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     networks:
       - webnet
 networks:
   webnet:
+volumes:
+  db-data:
+    driver: local

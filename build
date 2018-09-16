@@ -1,8 +1,9 @@
 #!/bin/sh
 buildTarget()
 {
-	docker build -t $1 ./services/$1/.
+	docker build -t kgaitanis/bee:$1 ./services/$1/.
+	docker push kgaitanis/bee:$1
 }
 
 buildTarget user
-
+#buildTarget flask-user
