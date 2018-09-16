@@ -1,5 +1,4 @@
 from dbModel import *
-import session_token
 
 import time
 

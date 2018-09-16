@@ -10,8 +10,6 @@ import logging
 
 from dbOps import *
 
-logging.getLogger().setLevel(logging.INFO)
-
 counter_id = None
 api = Api(app)
 
@@ -106,4 +104,4 @@ if __name__ == "__main__":
 	api.add_resource(User, "/user/<int:id>")
 	api.add_resource(DefaultCounter, "/counter")
 	api.add_resource(Counter, "/counter/<int:id>")
-	app.run(host='0.0.0.0', port=port)
+	app.run(host='0.0.0.0', port=Config.port)

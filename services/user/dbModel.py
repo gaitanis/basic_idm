@@ -1,20 +1,7 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
-from flask_jwt_extended import JWTManager
+import json
 
 from config import *
-import os, logging, json
-
-# Connect to SQL
-logging.info('connecting to {}'.format(db_url))
-
-app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True #jwt error propagation
-app.config['JWT_SECRET_KEY'] = token_secret
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url
-jwt = JWTManager(app)
-db = SQLAlchemy(app)
 
 class SQLCounter(db.Model):
 	__tablename__ = 'counters'
