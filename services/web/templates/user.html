@@ -1,0 +1,21 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BeeKeeper - User</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+    var app_host = '{{ config.app_host }}';
+  </script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/login.js')}}"></script>
+</head>
+<body>
+  <div class="user">
+		<div class="fieldTitle">Name:</div>
+		<div class="field">{{ user.name }}</div>
+		<div class="fieldTitle">Id:</div>
+		<div class="field">{{ user.id }}</div>
+		<div class="fieldTitle">Password:</div>
+		<div class="field">{{ user.pwd }}</div>
+  </div>
+</body>
+</html>

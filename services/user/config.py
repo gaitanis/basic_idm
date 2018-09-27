@@ -18,13 +18,3 @@ class Config:
 	env_name = os.getenv("NAME", "Development")
 	port = os.getenv("PORT", 4002)
 	token_secret = os.getenv("TOKEN_SECRET", "myprecious")
-
-logging.getLogger().setLevel(logging.INFO)
-logging.info('connecting to {}'.format(Config.db_url))
-
-app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True #jwt error propagation
-app.config['JWT_SECRET_KEY'] = Config.token_secret
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.db_url
-jwt = JWTManager(app)
-db = SQLAlchemy(app)

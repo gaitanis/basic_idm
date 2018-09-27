@@ -15,13 +15,15 @@ EXPOSE 4000
 # Copy the current directory contents into the container at /workdir
 ADD *.py /workdir/
 
-RUN mkdir /workdir/templates
+RUN mkdir /workdir/templates && \
+    mkdir /workdir/static && \
+  	mkdir /workdir/static/js
+
+ADD static/js/* /workdir/static/js/
 ADD templates/* /workdir/templates/
-RUN mkdir /workdir/static && \
-	mkdir /workdir/static/js
-ADD static/* /workdir/static/js/
 
 ENV PORT 80
+ENV APP_URL http://user
 
 # Run app.py when the container launches
 CMD ["python", "web.py"]

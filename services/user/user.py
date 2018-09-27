@@ -1,5 +1,5 @@
 from flask import Flask, render_template, make_response, request
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
 from session_token import *
 
@@ -9,11 +9,9 @@ import socket
 import logging
 
 from dbOps import *
+from app import *
 
-counter_id = None
-api = Api(app)
-
-@api.representation('application/json')
+@App.api.representation('application/json')
 def output_json(data, code, headers=None):
 	try:
 		resp = make_response(data.json(), code)
@@ -22,7 +20,7 @@ def output_json(data, code, headers=None):
 	resp.headers.extend(headers or {})
 	return resp
 
-@jwt.claims_verification_failed_loader
+@App.jwt.claims_verification_failed_loader
 def claimsFailed():
 	logging.error('claims Failed')
 	return 'oups', 404
@@ -32,16 +30,6 @@ class ApiError:
 		self.msg = msg
 	def json(self):
 		return json.dumps({'error':self.msg})
-
-class DefaultCounter(Resource):
-	def get(self):
-		logging.info('counter.get.default.{}'.format(counter_id))
-		return increaseCounterAPI(counter_id)
-
-class Counter(Resource):
-	def get(self, id):
-		logging.info('counter.get.{}'.format(id))
-		return increaseCounterAPI(id)
 
 class User(Resource):
 	@jwt_required
@@ -87,21 +75,10 @@ def createUserAPI(name, pwd):
 	logging.info('user.register.success')
 	return user, 200
 
-def increaseCounterAPI(id):
-	counter = increaseCounter(id)
-	if counter == None:
-		logging.error("user.counter.not_found.failed")
-		return ApiError('counter not found'), 404
-
-	logging.info("user.counter.success")
-	return counter, 200
 
 if __name__ == "__main__":
 	connectDB()
-	counter_id = getCounterId()
-	api.add_resource(Register, "/user")
-	api.add_resource(Login, "/login")
-	api.add_resource(User, "/user/<int:id>")
-	api.add_resource(DefaultCounter, "/counter")
-	api.add_resource(Counter, "/counter/<int:id>")
-	app.run(host='0.0.0.0', port=Config.port)
+	App.api.add_resource(Register, "/user")
+	App.api.add_resource(Login, "/login")
+	App.api.add_resource(User, "/user/<int:id>")
+	App.app.run(host='0.0.0.0', port=Config.port)
